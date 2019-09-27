@@ -42,14 +42,17 @@ urlpatterns += [
 from django.conf import settings
 from django.conf.urls.static import static
 
-
+# Serve static files given the url. document_root is the root directory
+# to find the static files. The files need to be collected by running
+# `python manage.py collectstatic`.
 urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
-#Add URL maps to redirect the base URL to our application
+# Add URL maps to redirect the base URL to our application.
 from django.views.generic import RedirectView
+# Permanent redirect might make browser cache the url.
 urlpatterns += [
-    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+    path('', RedirectView.as_view(url='/catalog/', permanent=False)),
 ]
 
 
