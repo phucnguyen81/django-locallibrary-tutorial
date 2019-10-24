@@ -1,5 +1,5 @@
 # Activate project virtual environment
 Set-Location $PSScriptRoot
-$activate_script = './venv_locallibrary/Scripts/activate.ps1'
-Assert $(Test-Path $activate_script) "$activate_script is missing"
-./venv_locallibrary/Scripts/activate.ps1
+$activate_script = Resolve-Path 'venv_locallibrary/Scripts/activate.ps1'
+if (-not $activate_script) { return }
+& "$activate_script"
