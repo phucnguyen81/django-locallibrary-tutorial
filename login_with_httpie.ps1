@@ -1,28 +1,36 @@
+# Login and request my books using httpie command
+
+foreach ($cmd in Get-Command @('http', 'jq')) {
+    if (-not (Get-Command $cmd)) { return }
+}
+
+$login_url = 'localhost:8000/accounts/login/'
+$secured_url = 'localhost:8000/catalog/mybooks/'
 $username = 'phuc'
 $password = 'phuc'
-$session = 'session3'
 
-# Get csrftoken
-http localhost:8000/accounts/login/ --session=$session -h
-# Response looks like:
-# HTTP/1.1 200 OK
-# Set-Cookie: csrftoken=euogGDvtNo8JH6f5hWHm3yG7H0Lq9bbF72zLqAwSxphKKQgh2k77tyaWMBfKgUtF
+$curdir = Get-Location
+if ($PSScriptRoot) {
+    $curdir = $PSScriptRoot
+}
 
-# TODO parse response (e.g. with jq) to get the csrf token
-$csrf_token = '2C5z21Ex4Wv09ZUkeujISsy38BNHlOjSEpVsdEAU1yyQMavtMfqmtSMJ3JGqyHSN'
+$session_file = ''
+if (Test-Path -LiteralPath $curdir) {
+    $session_file = Join-Path $curdir `
+        -ChildPath 'http_session.json'
+}
+
+# Initial request for csrf token
+http $login_url --session $session_file --headers
+
+# Parse response with jq to get the csrf token
+$json_query = '..|.csrftoken?|select(.!=null)|.value'
+$csrf_token = $(jq --raw-output $json_query $session_file)
 
 # Login with the response CRRFToken
-http -f POST localhost:8000/accounts/login/ `
-    username=$username password=$password `
+http --form POST $login_url username=$username password=$password `
     X-CSRFToken:$csrf_token `
-    --session=$session --follow -h
-# Response looks like:
-# HTTP/1.1 302 Found
-# Location: /
-# Set-Cookie: csrftoken=494DkUK7kRx0DacCrxn9SyTUjNm1SmsqiOO16zRYnt0xnTxEchm5GVeWN7u16Lz3
-# Set-Cookie: sessionid=p0cochytq080zmbk6dncw0jiyukcvbw9
+    --session=$session_file --follow --headers
 
 # Request secure data
-http localhost:8000/catalog/mybooks/ --session=$session -h
-# Response looks like:
-# HTTP/1.1 200 OK
+http $secured_url --session=$session_file --headers

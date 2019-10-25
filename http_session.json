@@ -1,0 +1,29 @@
+{
+    "__meta__": {
+        "about": "HTTPie session file",
+        "help": "https://httpie.org/doc#sessions",
+        "httpie": "1.0.3"
+    },
+    "auth": {
+        "password": null,
+        "type": null,
+        "username": null
+    },
+    "cookies": {
+        "csrftoken": {
+            "expires": 1603441883,
+            "path": "/",
+            "secure": false,
+            "value": "xhgJIVGLWvs2aExQHtFgxlJ6wvkIqMPLkLd7hvbuf6ifSTeJrVgLtsVQZOqHDzKH"
+        },
+        "sessionid": {
+            "expires": 1573201883,
+            "path": "/",
+            "secure": false,
+            "value": "hfof2og63tt98x8q5u8he9qaer4sw1v7"
+        }
+    },
+    "headers": {
+        "X-CSRFToken": "1GtlgNWcXdeeu8kkZVBCKXqMouy90DnbYpuBt1TorBjIyA8PH4xRGGnyUwqLD1XX"
+    }
+}
