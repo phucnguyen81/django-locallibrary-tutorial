@@ -1,7 +1,7 @@
 Properties {
     $requiredDirectories = @(
         '.git',
-        'venv_locallibrary',
+        'venv',
         'manage.py'
     )
 }
